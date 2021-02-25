@@ -1,29 +1,59 @@
-## Overview
+## GraphQL CMS Demo
 
-Base project folder for a SilverStripe ([http://silverstripe.org](http://silverstripe.org)) installation. Required modules are installed via [http://github.com/silverstripe/recipe-cms](http://github.com/silverstripe/recipe-cms). For information on how to change the dependencies in a recipe, please have a look at [https://github.com/silverstripe/recipe-plugin](https://github.com/silverstripe/recipe-plugin). In addition, installer includes [theme/simple](https://github.com/silverstripe-themes/silverstripe-simple) as a default theme.
+This is a basic Silverstripe CMS installation that can
+be used as a backend for a decoupled project. It includes
+a handful of really simple models that express relationships
+that can be queried, filtered, sorted, and mutated in
+the GraphQL API.
 
-## Installation ##
+### Models
+* ProductPage
+  * has_many Product
+    * has_many Review
+      * has_one Author (Member)
 
-`composer create-project silverstripe/installer my-app`
 
-See [Getting Started](https://docs.silverstripe.org/en/4/getting_started/) for more information.
+### Installation
 
-## Bugtracker ##
+`$ composer install`
+`vendor/bin/sake dev/graphql/build clear=1`
 
-Bugs are tracked on github.com ([framework issues](https://github.com/silverstripe/silverstripe-framework/issues),
-[cms issues](https://github.com/silverstripe/silverstripe-cms/issues)).
-Please read our [issue reporting guidelines](https://docs.silverstripe.org/en/4/contributing/issues_and_bugs/).
+### Seeding content
 
-## Development and Contribution ##
+Just go to a page and put `?seed=1` in the URL. 😂
 
-If you would like to make changes to the SilverStripe core codebase, we have an extensive [guide to contributing code](https://docs.silverstripe.org/en/4/contributing/code/).
+### Test your queries
 
-## Links ##
+Go go `/dev/graphql/ide` in the browser
 
- * [Changelogs](https://docs.silverstripe.org/en/4/changelogs/)
- * [Bugtracker: Framework](https://github.com/silverstripe/silverstripe-framework/issues)
- * [Bugtracker: CMS](https://github.com/silverstripe/silverstripe-cms/issues)
- * [Bugtracker: Installer](https://github.com/silverstripe/silverstripe-installer/issues)
- * [Forums](http://silverstripe.org/forums)
- * [Developer Mailinglist](https://groups.google.com/forum/#!forum/silverstripe-dev)
- * [License](./LICENSE)
+### Example query
+
+```
+query {
+  readProductPages {
+    nodes {
+      products(
+        filter: {
+        	price: { gt: 20 }
+      	},
+        sort: { lastEdited: DESC }
+      ) {
+        nodes {
+          title
+          reviews(filter: {
+            author:{
+              firstName: { startswith: "a" }
+            }
+          }) {
+            nodes {
+              id
+              content
+              rating
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
