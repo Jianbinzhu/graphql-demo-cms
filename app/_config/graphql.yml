@@ -10,7 +10,6 @@ SilverStripe\GraphQL\Schema\Schema:
   schemas:
     default:
       src:
-        - 'firesphere/graphql-jwt: _graphql'
         - 'app/_graphql'
 SilverStripe\Core\Injector\Injector:
   SilverStripe\GraphQL\Controller.default:
