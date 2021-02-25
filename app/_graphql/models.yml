@@ -1,0 +1,33 @@
+Page:
+  operations: '*'
+  fields:
+    '*': true
+    link: String
+SilverStripe\Assets\File:
+  operations: '*'
+  fields:
+    '*': true
+    url: String
+ProductPage:
+  fields: '*'
+  operations: '*'
+Product:
+  fields:
+    '*': true
+    reviewCount:
+      property: Reviews.Count()
+      type: Int
+    highestRating:
+      property: Reviews.Max(Rating)
+      type: Int
+  operations: '*'
+Review:
+  fields:
+    '*': true
+    score:
+      property: Rating
+      type: Int
+  operations: '*'
+SilverStripe\Security\Member:
+  fields: '*'
+  operations: '*'

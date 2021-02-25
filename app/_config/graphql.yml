@@ -1,0 +1,25 @@
+---
+Name: graphql-routes
+---
+SilverStripe\Control\Director:
+  rules:
+    'graphql':
+      Controller: '%$SilverStripe\GraphQL\Controller.default'
+
+SilverStripe\GraphQL\Schema\Schema:
+  schemas:
+    default:
+      src:
+        - 'firesphere/graphql-jwt: _graphql'
+        - 'app/_graphql'
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\GraphQL\Controller.default:
+    properties:
+      corsConfig:
+        Enabled: true
+        Allow-Origin: '*'
+  SilverStripe\GraphQL\QueryHandler\QueryHandlerInterface.default:
+    class: SilverStripe\GraphQL\QueryHandler\QueryHandler
+    properties:
+      Middlewares:
+        csrf: false
